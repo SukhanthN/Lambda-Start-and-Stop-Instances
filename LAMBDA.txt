@@ -1,0 +1,98 @@
+AWS Lambda:
+-----------
+AWS Lambda is a serverless, event-driven compute service that lets you Run code without thinking about servers or clusters.
+
+AWS Lambda is a serverless, event-driven compute service that lets you run code for virtually any type of application or 
+backend service without provisioning or managing servers. 
+You can trigger Lambda from over 200 AWS services and software as a service (SaaS) applications, and only pay for what you use.
+
+IDE ( integrated development environment) (pycham)
+
+In test environment no production servers we use lot of test servers by mistake we forgot to stop the system we will get a bill
+24*7. I want to stop all EC2 instances in the night. we can write the program using Lambda Functions. 
+It can any code python, java or .net.
+
+--> prerequisites
+	> code (python) ---> Stop
+	> scheduling program scheduler ( if it is Linux cron job your going to tell this python program should exextute at 7 O'clack
+	in the evening it will automatically run the program. 
+	if is is windows system we have to use task scheduler. you need to tell python program should exextute every one hour.
+
+		> Create a new task > task Name > new srigger.
+		> Cloud watch > Events > Rules > create a reule.
+	> where should this code 
+	> top 6 langauge in the world any langauge it will support. any langauge we can wirte it.
+	> cron job is the extension of advaced scheduling.
+	
+++++++++++++++++++++++++
+
+Lambda Functions	(IMP)
+
+--> scheduling Based  Every 5 imns, 10, 15, 20  (LM Lambda Functions > code > code prient > Cloud watch 
+(every thing is watch by what went worong by everthing)
+
+--> Event Based ec2-stop, ec2-start, ec2-delete, s3-put,get object anything like all this things are called as AWS Event.
+When ever this event happen Lambda code will exextuted.
+
+--> Any bigger > any time > any where > that si LF API.		(Contries api)
+
+
++++++++++++++++++++++++
+
+Lambda Functions Limitations
+	> we Lambda Functions code that can be exextuted for one hour only. now you have any program where it has to go exextute 
+	for three to four hours Lambda Function is not courrect one. Because of the time out is maximum one hour so program after
+	trminate is self timeout is specified is one hour only. Based on the timeout you can go for it.
+	
++++++++++++++++++++++++
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:Start*",
+        "ec2:Stop*"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+
++++++++++++++++++++++++
+
+Stops the EC2 instances
+
+
+import boto3
+region = 'us-east-1'
+instances = ['i-03d2341f9ba7e9823', 'i-0253c9bd715c5164e']
+ec2 = boto3.client('ec2', region_name=region)
+
+def lambda_handler(event, context):
+    ec2.stop_instances(InstanceIds=instances)
+    print('stopped your instances: ' + str(instances))
+	
++++++++++++++++++++++++
+
+Start the EC2 instances
+
+
+import boto3
+region = 'us-east-1'
+instances = ['i-03d2341f9ba7e9823', 'i-0253c9bd715c5164e']
+ec2 = boto3.client('ec2', region_name=region)
+
+def lambda_handler(event, context):
+    ec2.start_instances(InstanceIds=instances)
+    print('started your instances: ' + str(instances))
